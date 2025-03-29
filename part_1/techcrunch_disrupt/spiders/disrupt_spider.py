@@ -23,9 +23,12 @@ class DisruptSpider(scrapy.Spider):
         title = response.css('h1::text').get()
         author = response.css('a[rel="author"]::text').get()
         date = response.css('time::attr(datetime)').get()
-        paragraphs = response.css('div.article-content p::text').getall()
-        content = ' '.join(paragraphs)
-
+    
+        paragraphs = response.css('p.wp-block-paragraph::text').getall()
+        content = ' '.join(paragraphs).strip()
+    
+        self.log(f"Scraped content length: {len(content)} for {title}")
+    
         yield {
             'title': title,
             'author': author,
@@ -33,3 +36,22 @@ class DisruptSpider(scrapy.Spider):
             'url': response.url,
             'content': content
         }
+
+  
+
+
+    # def parse_article(self, response):
+    #     title = response.css('h1::text').get()
+    #     author = response.css('a[rel="author"]::text').get()
+    #     date = response.css('time::attr(datetime)').get()
+    #     # paragraphs = response.css('div.article-content p::text').getall()
+    #     paragraphs = response.css('article p::text').getall()
+    #     content = ' '.join(paragraphs)
+
+    #     yield {
+    #         'title': title,
+    #         'author': author,
+    #         'date': date,
+    #         'url': response.url,
+    #         'content': content
+    #     }
